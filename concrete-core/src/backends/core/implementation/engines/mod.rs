@@ -1,13 +1,19 @@
 //! A module containing the [engines](crate::specification::engines) exposed by the core backend.
 
+use std::collections::BTreeMap;
+use std::error::Error;
+use std::fmt::{Display, Formatter};
+
+use concrete_commons::parameters::{GlweSize, PolynomialSize};
+
+use crate::backends::core::private::crypto::bootstrap::FourierBskBuffers;
 use crate::backends::core::private::crypto::secret::generators::{
     EncryptionRandomGenerator as ImplEncryptionRandomGenerator,
     SecretRandomGenerator as ImplSecretRandomGenerator,
 };
+use crate::prelude::{FourierLweBootstrapKey32, FourierLweBootstrapKey64, LweBootstrapKeyEntity};
 use crate::specification::engines::sealed::AbstractEngineSeal;
 use crate::specification::engines::AbstractEngine;
-use std::error::Error;
-use std::fmt::{Display, Formatter};
 
 /// The error which can occur in the execution of FHE operations, due to the core implementation.
 ///
@@ -31,11 +37,6 @@ impl Display for CoreError {
 }
 
 impl Error for CoreError {}
-
-use crate::backends::core::private::crypto::bootstrap::FourierBskBuffers;
-use crate::prelude::{FourierLweBootstrapKey32, FourierLweBootstrapKey64, LweBootstrapKeyEntity};
-use concrete_commons::parameters::{GlweSize, PolynomialSize};
-use std::collections::BTreeMap;
 
 #[derive(Ord, PartialOrd, Eq, PartialEq)]
 pub(crate) struct FourierBufferKey(pub PolynomialSize, pub GlweSize);
@@ -105,6 +106,8 @@ mod glwe_ciphertext_decryption;
 mod glwe_ciphertext_discarding_decryption;
 mod glwe_ciphertext_discarding_encryption;
 mod glwe_ciphertext_encryption;
+mod glwe_ciphertext_ggsw_ciphertext_discarding_external_product;
+mod glwe_ciphertext_ggsw_ciphertext_external_product;
 mod glwe_ciphertext_trivial_encryption;
 mod glwe_ciphertext_vector_decryption;
 mod glwe_ciphertext_vector_discarding_decryption;
