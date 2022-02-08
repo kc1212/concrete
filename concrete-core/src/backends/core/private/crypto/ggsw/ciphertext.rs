@@ -1,11 +1,14 @@
+use crate::backends::core::private::crypto::encoding::Plaintext;
 use crate::backends::core::private::crypto::glwe::GlweList;
 use crate::backends::core::private::math::tensor::{
     ck_dim_div, tensor_traits, AsMutSlice, AsMutTensor, AsRefSlice, AsRefTensor, Tensor,
 };
+use crate::backends::core::private::math::torus::UnsignedTorus;
 
 use super::GgswLevelMatrix;
 
 use crate::backends::core::private::math::decomposition::DecompositionLevel;
+use concrete_commons::numeric::Numeric;
 use concrete_commons::parameters::{
     DecompositionBaseLog, DecompositionLevelCount, GlweSize, PolynomialSize,
 };
@@ -66,6 +69,29 @@ impl<Scalar> GgswCiphertext<Vec<Scalar>> {
             rlwe_size,
             decomp_base_log,
         }
+    }
+}
+
+impl<Scalar> GgswCiphertext<Vec<Scalar>>
+where
+    Scalar: UnsignedTorus,
+{
+    pub fn new_trivial_encryption(
+        poly_size: PolynomialSize,
+        glwe_size: GlweSize,
+        decomp_level: DecompositionLevelCount,
+        decomp_base_log: DecompositionBaseLog,
+        plaintext: &Plaintext<Scalar>,
+    ) -> Self {
+        let mut ciphertext = Self::allocate(
+            Scalar::ZERO,
+            poly_size,
+            glwe_size,
+            decomp_level,
+            decomp_base_log,
+        );
+        ciphertext.fill_with_trivial_encryption(plaintext);
+        ciphertext
     }
 }
 
@@ -431,5 +457,37 @@ impl<Cont> GgswCiphertext<Cont> {
                     DecompositionLevel(index + 1),
                 )
             })
+    }
+
+    pub fn fill_with_trivial_encryption<Scalar>(&mut self, plaintext: &Plaintext<Scalar>)
+    where
+        Self: AsMutTensor<Element = Scalar>,
+        Scalar: UnsignedTorus,
+    {
+        // We fill the ggsw with trivial glwe encryptions of zero:
+        for mut glwe in self.as_mut_glwe_list().ciphertext_iter_mut() {
+            let mut mask = glwe.get_mut_mask();
+            mask.as_mut_tensor().fill_with_element(Scalar::ZERO);
+        }
+        let base_log = self.decomposition_base_log();
+        for mut matrix in self.level_matrix_iter_mut() {
+            let decomposition = plaintext.0.wrapping_mul(
+                Scalar::ONE
+                    << (<Scalar as Numeric>::BITS
+                        - (base_log.0 * (matrix.decomposition_level().0))),
+            );
+            // We iterate over the rows of the level matrix
+            for (index, row) in matrix.row_iter_mut().enumerate() {
+                let rlwe_ct = row.into_glwe();
+                // We retrieve the row as a polynomial list
+                let mut polynomial_list = rlwe_ct.into_polynomial_list();
+                // We retrieve the polynomial in the diagonal
+                let mut level_polynomial = polynomial_list.get_mut_polynomial(index);
+                // We get the first coefficient
+                let first_coef = level_polynomial.as_mut_tensor().first_mut();
+                // We update the first coefficient
+                *first_coef = first_coef.wrapping_add(decomposition);
+            }
+        }
     }
 }
