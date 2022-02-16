@@ -22,7 +22,7 @@ use concrete_commons::parameters::{
     PolynomialSize,
 };
 
-mod buffers;
+pub(crate) mod buffers;
 #[cfg(test)]
 mod tests;
 
