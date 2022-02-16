@@ -189,3 +189,9 @@ pub use cleartext_creation::*;
 mod lwe_ciphertext_encryption;
 
 pub use lwe_ciphertext_encryption::*;
+
+mod glwe_ciphertext_ggsw_ciphertext_discarding_external_product;
+pub use glwe_ciphertext_ggsw_ciphertext_discarding_external_product::*;
+
+mod glwe_ciphertext_ggsw_ciphertext_external_product;
+pub use glwe_ciphertext_ggsw_ciphertext_external_product::*;
