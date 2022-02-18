@@ -613,7 +613,7 @@ where
                     + square(K::expectation_key_coefficient())));
     let res_4 = k * big_n / 8. * K::variance_key_coefficient::<T>().get_modular_variance::<T>();
     let res_5 = 1. / 16. * square(1. - k * big_n * K::expectation_key_coefficient());
-    Variance(res_1 + res_2 + res_3 + res_4 + res_5)
+    Variance::from_modular_variance::<T>(res_1 + res_2 + res_3 + res_4 + res_5)
 }
 
 /// Computes the dispersion of a CMUX controlled with a GGSW encrypting binary keys.
