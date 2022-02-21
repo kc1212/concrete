@@ -232,12 +232,7 @@ impl<Cont, Scalar: UnsignedInteger + UnsignedTorus> FourierGlweCiphertext<Cont, 
             self.glwe_size()
         );
 
-        // we create an output Fourier GLWE ciphertext
-        //let mut output = FourierGlweCiphertext::from_container(
-        //    vec![Scalar::ZERO; (1 / 2) * self.poly_size.0 * (3 + self.poly_size.0)],
-        //    GlweSize((1 / 2) * (3 + self.poly_size.0)),
-        //    self.poly_size,
-        //);
+        // create an output FourierGLWECiphertext of the correct size
         let mut output = FourierGlweCiphertext::allocate(
             Complex64::new(0., 0.),
             self.poly_size,
