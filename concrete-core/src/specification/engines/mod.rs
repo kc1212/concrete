@@ -154,12 +154,17 @@ mod glwe_ciphertext_decryption;
 mod glwe_ciphertext_discarding_conversion;
 mod glwe_ciphertext_discarding_decryption;
 mod glwe_ciphertext_discarding_encryption;
+<<<<<<< HEAD
 mod glwe_ciphertext_discarding_multiplication_computation;
 mod glwe_ciphertext_discarding_relinearization_computation;
 mod glwe_ciphertext_discarding_tensor_product_computation;
 mod glwe_ciphertext_encryption;
 mod glwe_ciphertext_multiplication_computation;
 mod glwe_ciphertext_relinearization_computation;
+=======
+mod glwe_ciphertext_discarding_tensor_product_computation;
+mod glwe_ciphertext_encryption;
+>>>>>>> 8595199b3f119888205bf194372f1b4f7c90d198
 mod glwe_ciphertext_tensor_product_computation;
 mod glwe_ciphertext_trivial_encryption;
 mod glwe_ciphertext_vector_conversion;
@@ -239,30 +244,7 @@ mod plaintext_vector_discarding_conversion;
 mod plaintext_vector_discarding_retrieval;
 mod plaintext_vector_retrieval;
 
-pub use cleartext_conversion::*;
-pub use cleartext_creation::*;
-pub use cleartext_discarding_conversion::*;
-pub use cleartext_discarding_retrieval::*;
-pub use cleartext_encoding::*;
-pub use cleartext_retrieval::*;
-pub use cleartext_vector_conversion::*;
-pub use cleartext_vector_creation::*;
-pub use cleartext_vector_discarding_conversion::*;
-pub use cleartext_vector_discarding_retrieval::*;
-pub use cleartext_vector_encoding::*;
-pub use cleartext_vector_retrieval::*;
-pub use destruction::*;
-pub use glwe_ciphertext_conversion::*;
-pub use glwe_ciphertext_decryption::*;
-pub use glwe_ciphertext_discarding_conversion::*;
-pub use glwe_ciphertext_discarding_decryption::*;
-pub use glwe_ciphertext_discarding_encryption::*;
-pub use glwe_ciphertext_discarding_multiplication_computation::*;
-pub use glwe_ciphertext_discarding_relinearization_computation::*;
-pub use glwe_ciphertext_discarding_tensor_product_computation::*;
-pub use glwe_ciphertext_encryption::*;
-pub use glwe_ciphertext_multiplication_computation::*;
-pub use glwe_ciphertext_relinearization_computation::*;
+
 pub use glwe_ciphertext_tensor_product_computation::*;
 pub use glwe_ciphertext_trivial_encryption::*;
 pub use glwe_ciphertext_vector_conversion::*;
