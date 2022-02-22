@@ -10,14 +10,14 @@ engine_error! {
 }
 
 impl<EngineError: std::error::Error> GlweCiphertextTensorProductError<EngineError> {
-    pub fn perform_generic_checks<InputCiphertext1, InputCiphertext2, OutputCiphertext>(
+    pub fn perform_generic_checks<InputCiphertext1, InputCiphertext2>(
+        // pure operations we dont need outputciphertext
         input1: &InputCiphertext1,
         input2: &InputCiphertext2,
     ) -> Result<(), Self>
     where
         InputCiphertext1: GlweCiphertextEntity,
         InputCiphertext2: GlweCiphertextEntity<KeyDistribution = InputCiphertext1::KeyDistribution>,
-        OutputCiphertext: GlweCiphertextEntity<KeyDistribution = InputCiphertext1::KeyDistribution>,
     {
         if input1.polynomial_size().0 != input2.polynomial_size().0 {
             return Err(Self::PolynomialSizeMismatch);
