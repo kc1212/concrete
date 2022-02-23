@@ -174,6 +174,7 @@ impl<Cont, Scalar: UnsignedTorus> FourierGlweCiphertext<Cont, Scalar> {
     ///
     /// let mut fourier_glwe: FourierGlweCiphertext<_, u32> =
     ///     FourierGlweCiphertext::allocate(Complex64::new(0., 0.), PolynomialSize(10), GlweSize(7));
+    /// let buffers: FftBuffers<Scalar>;
     /// let buffers_in = &mut buffers.first_buffer;
     /// let buffers_out = &mut buffers.second_buffer;
     /// let glwe_in = GlweCiphertext::allocate(10 as u8, PolynomialSize(10), GlweSize(7));
