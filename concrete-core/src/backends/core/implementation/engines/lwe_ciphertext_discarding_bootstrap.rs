@@ -3,7 +3,8 @@ use crate::backends::core::implementation::entities::{
     FourierLweBootstrapKey32, FourierLweBootstrapKey64, GlweCiphertext32, GlweCiphertext64,
     LweCiphertext32, LweCiphertext64,
 };
-use crate::prelude::LweBootstrapKeyEntity;
+use crate::backends::core::private::math::fft::ALLOWED_POLY_SIZE;
+use crate::prelude::{CoreError, LweBootstrapKeyEntity};
 use crate::specification::engines::{
     LweCiphertextDiscardingBootstrapEngine, LweCiphertextDiscardingBootstrapError,
 };
@@ -79,6 +80,9 @@ impl
         acc: &GlweCiphertext32,
         bsk: &FourierLweBootstrapKey32,
     ) -> Result<(), LweCiphertextDiscardingBootstrapError<Self::EngineError>> {
+        if !ALLOWED_POLY_SIZE.contains(&glwe_input.polynomial_size().0) {
+            Err(CoreError::UnsupportedPolynomialSize)
+        }
         LweCiphertextDiscardingBootstrapError::perform_generic_checks(output, input, acc, bsk)?;
         unsafe { self.discard_bootstrap_lwe_ciphertext_unchecked(output, input, acc, bsk) };
         Ok(())
@@ -168,6 +172,9 @@ impl
         acc: &GlweCiphertext64,
         bsk: &FourierLweBootstrapKey64,
     ) -> Result<(), LweCiphertextDiscardingBootstrapError<Self::EngineError>> {
+        if !ALLOWED_POLY_SIZE.contains(&glwe_input.polynomial_size().0) {
+            Err(CoreError::UnsupportedPolynomialSize)
+        }
         LweCiphertextDiscardingBootstrapError::perform_generic_checks(output, input, acc, bsk)?;
         unsafe { self.discard_bootstrap_lwe_ciphertext_unchecked(output, input, acc, bsk) };
         Ok(())

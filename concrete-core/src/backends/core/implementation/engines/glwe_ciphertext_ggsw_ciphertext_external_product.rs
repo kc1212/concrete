@@ -3,7 +3,8 @@ use crate::backends::core::implementation::entities::{
     FourierGgswCiphertext32, FourierGgswCiphertext64, GlweCiphertext32, GlweCiphertext64,
 };
 use crate::backends::core::private::crypto::glwe::GlweCiphertext as ImplGlweCiphertext;
-use crate::prelude::GgswCiphertextEntity;
+use crate::backends::core::private::math::fft::ALLOWED_POLY_SIZE;
+use crate::prelude::{CoreError, GgswCiphertextEntity};
 use crate::specification::engines::{
     GlweCiphertextGgswCiphertextExternalProductEngine,
     GlweCiphertextGgswCiphertextExternalProductError,
@@ -72,6 +73,9 @@ impl
         ggsw_input: &FourierGgswCiphertext32,
     ) -> Result<GlweCiphertext32, GlweCiphertextGgswCiphertextExternalProductError<Self::EngineError>>
     {
+        if !ALLOWED_POLY_SIZE.contains(&glwe_input.polynomial_size().0) {
+            Err(CoreError::UnsupportedPolynomialSize)
+        }
         GlweCiphertextGgswCiphertextExternalProductError::perform_generic_checks(
             glwe_input, ggsw_input,
         )?;
@@ -165,6 +169,9 @@ impl
         ggsw_input: &FourierGgswCiphertext64,
     ) -> Result<GlweCiphertext64, GlweCiphertextGgswCiphertextExternalProductError<Self::EngineError>>
     {
+        if !ALLOWED_POLY_SIZE.contains(&glwe_input.polynomial_size().0) {
+            Err(CoreError::UnsupportedPolynomialSize)
+        }
         GlweCiphertextGgswCiphertextExternalProductError::perform_generic_checks(
             glwe_input, ggsw_input,
         )?;

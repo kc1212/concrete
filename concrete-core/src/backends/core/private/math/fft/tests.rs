@@ -1,7 +1,9 @@
 use crate::backends::core::private::math::fft::twiddles::{BackwardCorrector, ForwardCorrector};
 #[cfg(feature = "serde_serialize")]
 use crate::backends::core::private::math::fft::SerializableComplex64;
-use crate::backends::core::private::math::fft::{Complex64, Fft, FourierPolynomial};
+use crate::backends::core::private::math::fft::{
+    Complex64, Fft, FourierPolynomial, ALLOWED_POLY_SIZE,
+};
 use crate::backends::core::private::math::polynomial::Polynomial;
 use crate::backends::core::private::math::random::RandomGenerator;
 use crate::backends::core::private::math::tensor::{AsMutTensor, AsRefTensor};
@@ -41,7 +43,7 @@ fn test_single_forward_backward() {
     }
     let mut generator = RandomGenerator::new(None);
     for _ in 0..100 {
-        for size in &[128, 256, 512, 1024, 2048, 4096, 8192, 16384] {
+        for size in &ALLOWED_POLY_SIZE {
             let fft = Fft::new(PolynomialSize(*size));
             let mut poly = Polynomial::allocate(f64::ZERO, PolynomialSize(*size));
             generator.fill_tensor_with_random_gaussian(&mut poly, 0., 1.);
@@ -94,7 +96,7 @@ fn test_two_forward_backward() {
     }
     let mut generator = RandomGenerator::new(None);
     for _ in 0..100 {
-        for size in &[128, 256, 512, 1024, 2048, 4096, 8192, 16384] {
+        for size in &ALLOWED_POLY_SIZE {
             let fft = Fft::new(PolynomialSize(*size));
             let mut poly1 = Polynomial::allocate(f64::ZERO, PolynomialSize(*size));
             generator.fill_tensor_with_random_gaussian(&mut poly1, 0., 1.);

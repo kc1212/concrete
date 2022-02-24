@@ -3,30 +3,31 @@
 //! This module provides the tools to perform a fast product of two polynomials, reduced modulo
 //! $X^N+1$, using the fast fourier transform.
 #[cfg(feature = "serde_serialize")]
+use std::fmt;
+
+pub use concrete_fftw::array::AlignedVec as FourierVec;
+#[cfg(feature = "serde_serialize")]
 use serde::de::{self, Deserialize, Deserializer, SeqAccess, Visitor};
 #[cfg(feature = "serde_serialize")]
 use serde::ser::{Serialize, SerializeTuple, Serializer};
-#[cfg(feature = "serde_serialize")]
-use std::fmt;
+
+pub use polynomial::*;
+pub use transform::*;
+use twiddles::*;
 
 #[cfg(test)]
 mod tests;
 
 mod twiddles;
-use twiddles::*;
 
 mod plan;
 
 mod polynomial;
-pub use polynomial::*;
 
 mod transform;
-pub use transform::*;
 
 /// A complex number encoded over two `f64`.
 pub type Complex64 = concrete_fftw::types::c64;
-
-pub use concrete_fftw::array::AlignedVec as FourierVec;
 
 #[derive(PartialEq, Copy, Clone, Debug, Default)]
 #[repr(transparent)]
@@ -79,4 +80,4 @@ impl<'de> Deserialize<'de> for SerializableComplex64 {
     }
 }
 
-pub use concrete_fftw::array::AlignedVec;
+pub(crate) const ALLOWED_POLY_SIZE: [usize; 8] = [128, 256, 512, 1024, 2048, 4096, 8192, 16384];
