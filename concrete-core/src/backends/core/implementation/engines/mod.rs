@@ -1,5 +1,11 @@
 //! A module containing the [engines](crate::specification::engines) exposed by the core backend.
 
+use std::collections::BTreeMap;
+use std::error::Error;
+use std::fmt::{Display, Formatter};
+
+use concrete_commons::parameters::{GlweSize, PolynomialSize};
+
 use crate::backends::core::private::crypto::bootstrap::FourierBuffers;
 use crate::backends::core::private::crypto::secret::generators::{
     EncryptionRandomGenerator as ImplEncryptionRandomGenerator,
@@ -7,10 +13,6 @@ use crate::backends::core::private::crypto::secret::generators::{
 };
 use crate::specification::engines::sealed::AbstractEngineSeal;
 use crate::specification::engines::AbstractEngine;
-use concrete_commons::parameters::{GlweSize, PolynomialSize};
-use std::collections::BTreeMap;
-use std::error::Error;
-use std::fmt::{Display, Formatter};
 
 /// The error which can occur in the execution of FHE operations, due to the core implementation.
 ///
@@ -39,6 +41,15 @@ impl Error for CoreError {}
 pub(crate) struct FourierBufferKey(pub PolynomialSize, pub GlweSize);
 
 /// The main engine exposed by the core backend.
+// We attach Fourier buffers to the Core Engine:
+// each time a bootstrap key is created, a check
+// is made to see whether those buffers exist for
+// the required polynomial and GLWE sizes.
+// If the buffers already exist, they are simply
+// used when it comes to computing FFTs.
+// If they don't exist already, they are allocated.
+// In this way we avoid re-allocating those buffers
+// every time an FFT or iFFT is performed.
 pub struct CoreEngine {
     secret_generator: ImplSecretRandomGenerator,
     encryption_generator: ImplEncryptionRandomGenerator,
