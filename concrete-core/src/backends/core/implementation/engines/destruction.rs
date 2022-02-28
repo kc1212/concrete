@@ -10,6 +10,7 @@ use crate::backends::core::implementation::entities::{
 use crate::backends::core::private::math::tensor::AsMutTensor;
 use crate::prelude::{
     FourierGgswCiphertext32, FourierGgswCiphertext64, GgswCiphertext32, GgswCiphertext64,
+    PackingKeyswitchKey32, PackingKeyswitchKey64,
 };
 use crate::specification::engines::{DestructionEngine, DestructionError};
 
@@ -371,4 +372,28 @@ impl DestructionEngine<GlweSecretKey64> for CoreEngine {
         let mut entity = entity;
         entity.0.as_mut_tensor().fill_with_element(0u64);
     }
+}
+
+impl DestructionEngine<PackingKeyswitchKey32> for CoreEngine {
+    fn destroy(
+        &mut self,
+        entity: PackingKeyswitchKey32,
+    ) -> Result<(), DestructionError<Self::EngineError>> {
+        unsafe { self.destroy_unchecked(entity) };
+        Ok(())
+    }
+
+    unsafe fn destroy_unchecked(&mut self, _entity: PackingKeyswitchKey32) {}
+}
+
+impl DestructionEngine<PackingKeyswitchKey64> for CoreEngine {
+    fn destroy(
+        &mut self,
+        entity: PackingKeyswitchKey64,
+    ) -> Result<(), DestructionError<Self::EngineError>> {
+        unsafe { self.destroy_unchecked(entity) };
+        Ok(())
+    }
+
+    unsafe fn destroy_unchecked(&mut self, _entity: PackingKeyswitchKey64) {}
 }
