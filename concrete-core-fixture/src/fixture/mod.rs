@@ -189,3 +189,7 @@ pub use cleartext_creation::*;
 mod lwe_ciphertext_encryption;
 
 pub use lwe_ciphertext_encryption::*;
+
+mod packing_keyswitch;
+
+pub use packing_keyswitch::*;
