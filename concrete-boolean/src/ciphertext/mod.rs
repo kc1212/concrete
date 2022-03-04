@@ -9,4 +9,4 @@ use serde::{Deserialize, Serialize};
 ///
 /// It is used to evaluate a Boolean circuits homomorphically.
 #[derive(Serialize, Clone, Deserialize)]
-pub struct Ciphertext(pub(crate) LweCiphertext<Vec<u32>>);
+pub struct Ciphertext(pub LweCiphertext<Vec<u32>>);

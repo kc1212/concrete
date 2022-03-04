@@ -23,9 +23,9 @@ use serde::{Deserialize, Serialize};
 /// * `parameters` - the cryptographic parameter set.
 #[derive(Serialize, Clone, Deserialize, PartialEq, Debug)]
 pub struct ClientKey {
-    pub(crate) lwe_secret_key: LweSecretKey<BinaryKeyKind, Vec<u32>>,
-    pub(crate) glwe_secret_key: GlweSecretKey<BinaryKeyKind, Vec<u32>>,
-    pub(crate) parameters: BooleanParameters,
+    pub lwe_secret_key: LweSecretKey<BinaryKeyKind, Vec<u32>>,
+    pub glwe_secret_key: GlweSecretKey<BinaryKeyKind, Vec<u32>>,
+    pub parameters: BooleanParameters,
 }
 
 impl ClientKey {
