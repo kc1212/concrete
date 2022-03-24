@@ -460,7 +460,7 @@ where
             })
     }
 
-    fn external_product<C1, C2, C3>(
+    pub fn external_product<C1, C2, C3>(
         &self,
         output: &mut GlweCiphertext<C1>,
         ggsw: &FourierGgswCiphertext<C2, Scalar>,
@@ -645,7 +645,7 @@ where
     }
 
     // This cmux mutates both ct1 and ct0. The result is in ct0 after the method was called.
-    fn cmux<C0, C1, C2>(
+    pub fn cmux<C0, C1, C2>(
         &self,
         ct0: &mut GlweCiphertext<C0>,
         ct1: &mut GlweCiphertext<C1>,
