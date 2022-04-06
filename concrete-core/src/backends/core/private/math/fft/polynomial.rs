@@ -59,7 +59,7 @@ impl<Cont> FourierPolynomial<Cont> {
         }
     }
 
-    pub(crate) fn from_tensor(tensor: Tensor<Cont>) -> Self {
+    pub fn from_tensor(tensor: Tensor<Cont>) -> Self {
         FourierPolynomial { tensor }
     }
 
